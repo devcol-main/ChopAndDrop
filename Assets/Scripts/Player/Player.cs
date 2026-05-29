@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
     
-    public PlayerController PlayerController { get; private set; }
+    public PlayerController playerController { get; private set; }
 
     private void Awake()
     {
@@ -22,9 +22,10 @@ public class Player : MonoBehaviour
         // Optional: Persist across scene changes
         DontDestroyOnLoad(gameObject);
         
-        //
-        PlayerController = GetComponent<PlayerController>();
+        playerController = GetComponent<PlayerController>();
+        
     }
+    
     
     
     

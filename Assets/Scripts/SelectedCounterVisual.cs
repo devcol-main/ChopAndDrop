@@ -11,10 +11,18 @@ public class SelectedCounterVisual : MonoBehaviour
     {
         clearCounter = GetComponent<ClearCounter>();
         counterMaterialSwap = GetComponent<CounterMaterialSwap>();
-        
-        Player.Instance.PlayerController.OnSelectedCounterChanged += Player_OnSelectedCounterChanged;
 
+        Player.Instance.playerController.OnSelectedCounterChanged += Player_OnSelectedCounterChanged;
     }
+
+    private void OnDestroy()
+    {
+        if (Player.Instance != null && Player.Instance.playerController != null)
+        {
+            Player.Instance.playerController.OnSelectedCounterChanged -= Player_OnSelectedCounterChanged;
+        }
+    }
+    
 
     private void Player_OnSelectedCounterChanged(object sender, PlayerController.OnSelectedCounterChangedEventArgs e)
     {
