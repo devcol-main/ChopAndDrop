@@ -5,27 +5,30 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerController))]
 public class Player : MonoBehaviour
 {
-    //
-    //private InputReader inputReader;
-    //private PlayerController playerController;
+    public static Player Instance { get; private set; }
     
-    //
-    
+    public PlayerController PlayerController { get; private set; }
+
     private void Awake()
     {
-        //inputReader = GetComponent<InputReader>();
-        //playerController = GetComponent<PlayerController>();
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); 
+            return;
+        }
+
+        Instance = this;
+
+        // Optional: Persist across scene changes
+        DontDestroyOnLoad(gameObject);
+        
+        //
+        PlayerController = GetComponent<PlayerController>();
     }
-
-
-    private void Update()
-    {
-       
-    }
-
-
-  
-
     
     
+    
+    
+    
+
 }

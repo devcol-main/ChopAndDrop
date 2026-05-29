@@ -7,9 +7,10 @@ public class InputReader : MonoBehaviour
 {
     public static InputReader Instance { get; private set; }
 
+    public event EventHandler OnInteractAction;
+    
     private InputSystem_Actions inputSystemActions;
 
-    public event EventHandler OnInteractAction;
 
     private void Awake()
     {

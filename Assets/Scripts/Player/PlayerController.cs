@@ -1,7 +1,17 @@
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    // public
+    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+
+    public class OnSelectedCounterChangedEventArgs : EventArgs
+    {
+        public ClearCounter SelectedCounter; //{ get; set; }
+    }
+    
+    
     //
     [SerializeField] private float movementSpeed = 7f;
     [SerializeField] private float rotationSpeed = 10f;
@@ -20,6 +30,8 @@ public class PlayerController : MonoBehaviour
     private bool canMove = true;
     
     private Vector3 lastInteractionDirection;
+
+    private ClearCounter selectedCounter;
     
     //
     public bool IsWalking => isWalking;
@@ -36,23 +48,11 @@ public class PlayerController : MonoBehaviour
     }
     private void InputReader_OnInteractAction(object sender, System.EventArgs e)
     {
-        
-        Debug.Log("InputReader_OnInteractAction");
-        
-        Vector3 moveDir = new Vector3(moveInput.x, 0, moveInput.y).normalized;
-
-        if (moveDir != Vector3.zero)
+        if (selectedCounter != null)
         {
-            lastInteractionDirection = moveDir;
+            selectedCounter.Interect();
         }
-
-        if (Physics.Raycast(transform.position, lastInteractionDirection, out RaycastHit hitInfo, interactionDistance))
-        {
-            if (hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))
-            {
-                clearCounter.Interect();
-            }
-        }
+        
     }
     
     private void Update()
@@ -144,8 +144,30 @@ public class PlayerController : MonoBehaviour
         {
             if (hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))
             {
-                clearCounter.Interect();
+                // Has Clear Counter
+                if (clearCounter != selectedCounter)
+                {
+                    SetSelectedCounter(clearCounter);
+                    
+                }
+                
+            }
+            else
+            {
+                SetSelectedCounter(null);
             }
         }
+        else
+        {
+            SetSelectedCounter(null);
+        }
+
+    }
+
+    private void SetSelectedCounter(ClearCounter selectedCounter)
+    {
+        this.selectedCounter = selectedCounter;
+        
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs {SelectedCounter = selectedCounter});
     }
 }
