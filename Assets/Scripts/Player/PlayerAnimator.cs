@@ -16,12 +16,14 @@ public class PlayerAnimator : MonoBehaviour
 
     private void Awake()
     {
+        
+        animator = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
         player = FindAnyObjectByType<Player>();
         playerController = FindAnyObjectByType<PlayerController>();   
-        
-        //
-        animator = GetComponent<Animator>();
-        
     }
 
     private void Update()

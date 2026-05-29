@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private InputReader inputReader;
-    
     //
     [SerializeField] private float movementSpeed = 7f;
     [SerializeField] private float rotationSpeed = 10f;
+    
+    [SerializeField] private float interactionDistance = 2f;
+    
+    [SerializeField] private LayerMask countersLayerMask;
     
     //
     private Vector2 moveInput;
@@ -17,25 +19,52 @@ public class PlayerController : MonoBehaviour
     private float playerHeight = 2f;
     private bool canMove = true;
     
+    private Vector3 lastInteractionDirection;
     
     //
     public bool IsWalking => isWalking;
-
-
     
-    private void Awake()
+
+    private void Start()
     {
-        inputReader = GetComponent<InputReader>();
+        InputReader.Instance.OnInteractAction += InputReader_OnInteractAction;
+    }
+
+    private void OnDisable()
+    {
+        InputReader.Instance.OnInteractAction -= InputReader_OnInteractAction;
+    }
+    private void InputReader_OnInteractAction(object sender, System.EventArgs e)
+    {
+        
+        Debug.Log("InputReader_OnInteractAction");
+        
+        Vector3 moveDir = new Vector3(moveInput.x, 0, moveInput.y).normalized;
+
+        if (moveDir != Vector3.zero)
+        {
+            lastInteractionDirection = moveDir;
+        }
+
+        if (Physics.Raycast(transform.position, lastInteractionDirection, out RaycastHit hitInfo, interactionDistance))
+        {
+            if (hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))
+            {
+                clearCounter.Interect();
+            }
+        }
     }
     
     private void Update()
     {
-        moveInput = inputReader.GetMovementInput();
+        moveInput = InputReader.Instance.GetMovementInput();
+        
     }
 
     private void FixedUpdate()
     {
         ControlMovement();
+        Interections();
     }
     
     private void ControlMovement()
@@ -100,5 +129,23 @@ public class PlayerController : MonoBehaviour
             distance);
         
         return canMove;
+    }
+    
+    private void Interections()
+    {
+        Vector3 moveDir = new Vector3(moveInput.x, 0, moveInput.y).normalized;
+
+        if (moveDir != Vector3.zero)
+        {
+            lastInteractionDirection = moveDir;
+        }
+
+        if (Physics.Raycast(transform.position, lastInteractionDirection, out RaycastHit hitInfo, interactionDistance))
+        {
+            if (hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))
+            {
+                clearCounter.Interect();
+            }
+        }
     }
 }

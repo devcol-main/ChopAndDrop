@@ -17,6 +17,15 @@ public class Player : MonoBehaviour
         //playerController = GetComponent<PlayerController>();
     }
 
+
+    private void Update()
+    {
+       
+    }
+
+
+  
+
     
     
 }
