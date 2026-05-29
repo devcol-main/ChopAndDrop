@@ -7,24 +7,26 @@ public class PlayerAnimator : MonoBehaviour
     // const strings
     private const string IS_WALKING = "IsWalking";
     
-    //
-    
-    private Animator animator;
+    // Objects
     private Player player;
+    private PlayerController playerController;
     
+    // Components
+    private Animator animator;
 
     private void Awake()
     {
-        //player = GetComponent<Player>();
         player = FindAnyObjectByType<Player>();
+        playerController = FindAnyObjectByType<PlayerController>();   
         
+        //
         animator = GetComponent<Animator>();
         
     }
 
     private void Update()
     {
-        animator.SetBool(IS_WALKING, player.IsWalking);
+        animator.SetBool(IS_WALKING, playerController.IsWalking);
         
     }
 }
