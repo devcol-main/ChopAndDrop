@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4589716710238282923}
   - component: {fileID: 2831942792982843299}
   m_Layer: 0
-  m_Name: CuttingCounter_Visual
+  m_Name: CuttingCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
